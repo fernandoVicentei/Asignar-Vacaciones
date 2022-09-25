@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css"  rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <title>Vacacion de Personal</title>
+</head>
+<body>
+    <div class="container-fluid text-center">
+        <div class="row">
+            <div class="col-12 p-4 bg-primary">
+               <h2 class=""> VACACIONES DE PERSONAL </h2>
+            </div>            
+          </div>
+          <div class="row" style="height: 95%;">
+            <div class="col-sm-4 p-1 mt-1" >
+                <div class="container-fluid  m-2" style="min-height: 100px ; max-height: 200px; width: 95%;">
+                    <p class="text-start fs-5">Personal</p>
+                    <button type="button" class="btn btn-success m-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Agregar Personal
+                    </button> 
+                    <div class="list-group scrollspy-example" id="lista"  style="height:120px;overflow:scroll;-webkit-overflow-scrolling: touch;" >
+                                                
+                    </div>
+                </div>
+
+                <div class="container  mt-2 pt-3" style="min-height: 100px ; max-height: 300px;width: 95%;">
+                  <p class="text-start fs-5">Vacaciones</p>
+                  <select class="form-select" id="MESES"  onchange="filtrar()">
+                    <option value="01">ENERO</option>
+                    <option value="02">FEBRERO</option> 
+                    <option value="03">MARZO</option>
+                    <option value="04">ABRIL</option> 
+                    <option value="05">MAYO</option>
+                    <option value="06">JUNIO</option> 
+                    <option value="07">JULIO</option>
+                    <option value="08">AGOSTO</option> 
+                    <option value="09">SEPTIEMBRE</option>
+                    <option value="00">OCTUBRE</option> 
+                    <option value="11">NOVIEMBRE</option>
+                    <option value="12">DICIEMBRE</option>                   
+                  </select>
+                  <div class="list-group scrollspy-example" id="lista_vacacion"  style="height:200px;overflow:scroll;-webkit-overflow-scrolling: touch;" >
+                      
+                  </div>
+
+              </div>
+                
+            </div>
+
+            <div class="col-sm-8 p-3 mt-5" style="height: 100%;" >
+                <div class="container" style="height: 100%;">
+                    <div id='calendar' ></div>
+                </div>
+                
+            </div>
+            
+          </div>
+
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Añadir Personal</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Nombre</span>
+                        <input type="text" class="form-control"  id="nombre" aria-describedby="inputGroup-sizing-sm">
+                      </div> 
+                      <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Apellido</span>
+                        <input type="text" class="form-control"  id="apellido" aria-describedby="inputGroup-sizing-sm">
+                      </div> 
+                      <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Area de Trabajo</span>
+                        <input type="text" class="form-control" id="trabajo" aria-describedby="inputGroup-sizing-sm">
+                      </div> 
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-primary" onclick="añadirPersonal()">Añadir</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="modal fade" id="vacaciones" tabindex="-1" aria-labelledby="vacacionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" >Asignar Vacaciones</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                
+                <div class="input-group">
+                  <span class="input-group-text">Inicio</span>
+                  <input id="inicio" type="date" class="form-control" >
+                </div>
+                <div class="input-group">
+                  <span class="input-group-text">Fin</span>
+                  <input id="fin" type="date" class="form-control" >
+                </div>
+                <div class="input-group">
+                  <span class="input-group-text">Estado</span>
+                   <select class="form-select" id="estado">
+                    <option value="1">ACEPTADO</option>
+                    <option value="0">DENEGADO</option>                   
+                  </select>
+                </div>
+              </div>
+              
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-primary" onclick="guardarVacacion()">Asignar Vacacion</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" 
+     integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" 
+    integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+    var nombre= document.getElementById('nombre' );
+    var apellido= document.getElementById('apellido' );
+    var trabajo= document.getElementById('trabajo' );
+    var myModalEl = document.getElementById('exampleModal');
+    var myModalEl2 = document.getElementById('vacaciones');
+    var lista= document.getElementById('lista');
+    var lista_vacacion= document.getElementById('lista_vacacion');
+    var usuario = document.getElementById('usuario');
+    var fecha_inicio=document.getElementById('inicio');
+    var fecha_fin=document.getElementById('fin');
+    var estado=document.getElementById('estado');
+    var idSeleccionado=0;
+    var calendar='';
+
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+      }
+    })
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      calendar = new FullCalendar.Calendar(calendarEl, {        
+        height: 400,
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: ''
+        },        
+        locale: 'es',
+        initialDate: '2022-08-01',
+        initialView: 'dayGridMonth',
+        selectable: true,
+        events:[
+            
+        ]
+      });
+      //calendar.select( new Date(2022, 8, 3) ,new Date(2022, 8, 15));
+      calendar.render();
+      let mes = new Date(Date.now()).getMonth()+1;
+      renderInicialPersonal();
+      renderInicialVacacion(mes);
+
+    });
+
+    function renderInicialPersonal(){
+        
+        var datos={ accion:'mostrarPersonal'};        
+        conectarConServidor( datos ).
+        then((e)=>{
+            //console.log(e);
+            if(e.estado=='ok'){              
+              renderPersonal(e.datos);    
+            }else{
+                console.log(e);                
+            }    
+        })
+        .catch((e)=>{
+            console.log('error en el server');            
+        })   
+    }
+    function renderInicialVacacion(mes){
+        
+        var datos={ accion:'obtenerPersonalxmes',mes:mes};        
+        conectarConServidor( datos ).
+        then((e)=>{
+            //console.log(e);
+            console.log(e);
+            if(e.estado=='ok'){              
+              renderVacacion(e.datos);    
+            }else{
+                console.log(e);                
+            }    
+        })
+        .catch((e)=>{
+            console.log('error en el server');            
+        })   
+    }
+
+    function agregarVacacion(id){
+       idSeleccionado=id;    
+    }
+    function guardarVacacion(){
+      if( fecha_inicio.value !='' && fecha_fin.value!='' && estado.value!= '' ){
+        var datos={ accion:'guardarVacacion',inicio:fecha_inicio.value,fin:fecha_fin.value,estado:estado.value,idPersonal:idSeleccionado };
+        console.log(datos)
+        conectarConServidor( datos ).
+        then((e)=>{
+            //console.log(e);
+            
+            if(e.estado=='ok'){              
+              renderVacacion(e.datos);
+              var modal = bootstrap.Modal.getOrCreateInstance(myModalEl2);
+              modal.hide();
+              document.querySelector('.modal-backdrop').hidden=true;                
+            }else{
+                console.log(e);        
+
+            }    
+        })
+        .catch((e)=>{
+            console.log('error en el server');            
+        })        
+
+      }else{
+        Toast.fire({
+          icon: 'error',
+          title: 'Debe llenar todos los datos'
+        })
+      } 
+
+    }
+
+
+    function añadirPersonal(){
+      if( nombre.value !='' && apellido.value!='' && trabajo.value != '' ){
+        var datos={ accion:'nuevoPersonal',nombre:nombre.value, apellido:apellido.value,trabajo:trabajo.value };
+        console.log(datos)
+        conectarConServidor( datos ).
+        then((e)=>{
+            //console.log(e);
+            if(e.estado=='ok'){              
+              renderPersonal(e.datos);
+              var modal = bootstrap.Modal.getOrCreateInstance(myModalEl);
+              modal.hide();
+              document.querySelector('.modal-backdrop').hidden=true;                
+            }else{
+                console.log(e);                
+            }    
+        })
+        .catch((e)=>{
+            console.log('error en el server');            
+        })        
+
+      }else{
+        Toast.fire({
+          icon: 'error',
+          title: 'Debe llenar todos los datos'
+        })
+      } 
+
+    }
+
+    function renderPersonal(datos){
+      //console.log(datos);
+      let contenido='';
+      lista.innerHTML='';
+      datos.forEach(element => {
+          contenido+='<li class="list-group-item d-flex justify-content-between align-items-start">'+
+                      '<div class="ms-2 me-auto"  >'+
+                        '<div class="fw-bold">'+ element.nombre +' '+element.apellido+'</div>'+
+                        '<p class="text-start">'+element.area_trabajo+'</p>'+                       
+                      '</div>'+                     
+                      '<i class="bi bi-plus-circle fa-x7" data-bs-toggle="modal" data-bs-target="#vacaciones"  onclick="agregarVacacion('+element.id+')"></i>'+
+                    '  </div></li>';
+
+      });
+      lista.innerHTML=contenido;
+
+    }
+    function renderVacacion(datos){
+      let contenido='';
+      lista_vacacion.innerHTML='';
+      datos.forEach(element => {
+          contenido+='<li class="list-group-item d-flex justify-content-between align-items-start">'+
+                      '<div class="ms-2 me-auto"  onclick="verVacacion('+element.id_vac+')" style="cursor: pointer">'+
+                        '<div class="fw-bold text-start">'+ element.nombre +' '+element.apellido+'</div>'+
+                        '<p class="text-start"> '+element.fecha+' </p>'+                       
+                      '</div>'+
+                      '<div class="ms-2"> <span class="badge bg-info rounded-pill"  >'+(element.aprobado==0?'DENEGADO':'APROBADO')+'</span><br><br>'+
+                    '  </div></li>';
+      });
+      lista_vacacion.innerHTML=contenido;
+
+    }
+
+    function verVacacion(id){
+      var datos={ accion:'obtenerVacacion',idPersona:id};    
+      conectarConServidor( datos ).
+        then((e)=>{            
+            console.log(e.datos[0]);
+            if(e.estado=='ok'){              
+              var inicio=e.datos[0].fecha_vacacion;
+              var fin=e.datos[0].fecha_fin_vacacion;
+
+              var calendarEl = document.getElementById('calendar');
+              calendar = new FullCalendar.Calendar(calendarEl, {        
+                height: 400,
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: ''
+                },        
+                locale: 'es',
+                initialDate: inicio,
+                initialView: 'dayGridMonth',
+                selectable: true,
+                events:[
+                    {
+                        title:'Inicio',
+                        start: inicio,
+                        overlap: false,
+                        display: 'background',
+                        color: '#066308',
+                        textColor: '#000000',
+                    },
+                    {
+                        title:'Vacacion',
+                        start: inicio,
+                        end: fin,
+                        display: 'background',
+                        color: '#D0F356',
+                        textColor: '#000000',              
+                    },
+                    {
+                        title:'Fin',
+                        start: fin,                
+                        display: 'background',
+                        color: '#C50A0A',
+                        textColor: '#000000',
+                    },
+                ]
+              });
+              //calendar.select( new Date(2022, 8, 3) ,new Date(2022, 8, 15));
+              calendar.render();
+
+
+                
+            }else{
+                console.log(e);                
+            }    
+      })
+      .catch((e)=>{
+          console.log('error en el server');            
+      })        
+
+      
+
+
+    }
+
+    function conectarConServidor(datos){
+      return new Promise((resolve,reject)=>{
+          fetch('./backend/funciones.php',{
+              method:'POST',
+              body:JSON.stringify(datos),
+              headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+              }
+          })        
+          .then((data)=> {                    
+              if(data.ok){
+                  return data.json();
+              }
+              reject('Ocurrio un error'+ data);
+          })
+          .then((data) =>{                 
+              resolve(data);
+          })
+          .catch(function(error) {
+              console.log(error);
+              reject(error);
+          })
+      });    
+    }
+
+    function filtrar(){
+    
+
+      var mes=  document.getElementById('MESES').value;
+      lista_vacacion.innerHTML='';
+      renderInicialVacacion(mes);
+
+    }
+  </script>
+
+</body>
+</html>
